@@ -1,11 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
 
-  Firestore.instance.collection('mensagens').document('HdOE0rTMn7h7ELnmrPHP').collection('arquivos').document().setData({
-    'arqname': 'foto.png'
+  Firestore.instance.collection('mensagens').snapshots().listen((dado){
+
+    dado.documents.forEach((d) {
+
+      print(d.data);
+    });
   });
 }
 
