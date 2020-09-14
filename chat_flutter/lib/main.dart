@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(MyApp());
 
-  Firestore.instance.collection("col").document("doc").setData({"texto": "brendow"});
+  Firestore.instance.collection('mensagens').document('HdOE0rTMn7h7ELnmrPHP').collection('arquivos').document().setData({
+    'arqname': 'foto.png'
+  });
 }
 
 class MyApp extends StatelessWidget {
