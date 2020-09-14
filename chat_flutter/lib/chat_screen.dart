@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:chat_flutter/text_composer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -39,7 +40,38 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Text('Olá'),
         elevation: 0,
       ),
-      body: TextComposer(_sendMessage),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+              child: StreamBuilder <QuerySnapshot>(
+                  stream: Firestore.instance.collection('messages').snapshots(),
+                  builder: (context, snapshot) {
+                    switch(snapshot.connectionState) {
+                      case ConnectionState.none:
+                      case ConnectionState.waiting:
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      default:
+                        List<DocumentSnapshot> document =
+                            snapshot.data.documents.reversed.toList();
+
+                        return ListView.builder(
+                            itemCount: document.length,
+                            reverse: true,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(document[index].data['text']),
+                              );
+                            }
+                        );
+                    }
+                  },
+              ),
+          ),
+          TextComposer(_sendMessage),
+        ],
+      ),
     );
   }
 }
